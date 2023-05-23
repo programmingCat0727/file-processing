@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SYS</title>
+    <link href="../static/index.css" rel="stylesheet" type="text/css">
+    <script src="../static/jquery-3.6.0.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            $("#a_close").click( function () {
+                $("#a_box").hide()
+            })
+            if (!({{ setting_a_box }})) {
+                $("#a_box").hide()
+            }
+        })
+    </script>
+</head>
+<body>
+    <div id="a_box" style="font-size: 15px; background-color: black; color: white;">
+        <a id="a_close" style="font-size: 12px; display: inline;">關閉</a>
+        無響應功能
+    </div>
+    <div class="title">
+        <div class="title_I">功能一覽</div>
+        <div class="title_I"></div>
+    </div>
+    <div class="link_box">
+        <a href="/rename/findfilesfrom={{ folder }}">批次檔案重新命名</a>
+        <a href="/repeat/findfilesfrom={{ folder }}">處理重複檔案</a>
+        <a href="/setting">變更設定</a>
+    </div>
+</body>
+</html>

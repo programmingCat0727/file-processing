@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SYS>rename</title>
+    <link href="../static/index.css" rel="stylesheet" type="text/css">
+    <script src="../static/jquery-3.6.0.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            function find_files(text) {
+                if (text == "") {
+                    $("#find_files_list").html('<div>無預備檔案</div><a class="link_a" id="refind">重新尋找匯入檔</a>')
+                } else {
+                    html_text = ""
+                    text = text.split("|")
+                    text.forEach(n => {
+                        if (n == text[0]) {
+                            from_folder = `從"${n}"資料夾中發現以下檔案：`
+                        } else {
+                            html_text += `
+                                <div>
+                                    ${n}
+                                </div>`
+                        }
+                    });
+                    $("#find_files_list").html(`${from_folder}<div id="find_files_list_a" style="margin-left: 2em">${html_text}</div><div style="text-align: end;"><a class="link_a" id="refind">重新尋找匯入檔</a></div>`)
+                }
+            }
+            function files_num() {
+                i = $("#files_i").val();
+                n = $("#files_n").val();
+                $("#files_num").text(`${(10**i)-n}`)
+            }
+            // 執行區
+            find_files($("#find_files_list").text())
+            files_num()
+            $("#files_num_b").text(`${($("#find_files_list_a").children("div").length)}`)
+            $("#find_files").click( function () {
+                $("#find_files_list").toggle()
+            })
+            $("#from_files").click( function () {
+                $("#from_files_list").toggle()
+            })
+            $("#rename_data").click( function () {
+                $("#rename_data_list").toggle()
+            })
+            $("#rename_setting").click( function () {
+                $("#rename_setting_list").toggle()
+            })
+            $("#filtr").change( function () {
+                $("#filtr_a").toggle()
+            })
+            $("#a_close").click( function () {
+                $("#a_box").hide()
+            })
+            if (!({{ setting_a_box }})) {
+                $("#a_box").hide()
+            }
+
+            $("#refind").click( function () {
+                if ((window.location.pathname).indexOf("findfilesfrom=") != -1) {
+                    folder = window.location.pathname.substr(22)
+                    value = `/rename/findfilesfrom=${folder.substr(0 ,folder.indexOf("*")+1)}`
+                    value += ($("#filtr:checked").length && $("input:radio:checked[name='filtr']").length) ? `.${$("input:radio:checked[name='filtr']").val()}` : "";
+                    location.replace(value);
+                } else {
+                    alert("錯誤！")
+                }
+            })
+
+            $("#start_findfilesfrom").click( function () {
+                value = $("#from_folder").val();
+                if (value.length == 0) {
+                    $("#from_folder_a").text("此格不能空")
+                // } else if (value.indexOf(" ") != -1) {
+                //     $("#from_folder_a").text("不允許含有空白")
+                } else {
+                    $("#from_folder_a").text("")
+                    value = value.replace(/\//g, "|")
+                    value = value.replace(/\\/g, "|")
+                    value = `/rename/findfilesfrom=${value}|*`
+                    value += ($("#filtr:checked").length && $("input:radio:checked[name='filtr']").length) ? `.${$("input:radio:checked[name='filtr']").val()}` : "";
+                    location.replace(value)
+                }
+            })
+
+            $("#files_i").on("input", function () {
+                value = $("#files_i").val();
+                if (value>6) {
+                    value=6
+                } else if (value<1) {
+                    value=1
+                } else if (value.length!=1) {
+                    value=1
+                }
+                $("#files_i").val(value);
+                $("#files_n_a").text(`目前起始最大值為：${(10 ** value)-1}`);
+                files_num()
+                
+            })
+            $("#files_n").on("input", function () {
+                i = $("#files_i").val();
+                value = $("#files_n").val();
+                if (value >= 10**i) {
+                    value=(10**i)-1
+                } else if (value<0) {
+                    value=0
+                } else if (value.length > i) {
+                    value=(10**i)-1
+                } else if (value.length == 0) {
+                    value=0
+                }
+                $("#files_n").val(value);
+                files_num()
+            })
+
+            $("#start_rename").click( function () {
+                files_f = $("#files_f").val()
+                files_e = $("#files_e").val()
+                files_i = $("#files_i").val()
+                files_n = $("#files_n").val()
+                f = false
+                if (files_f.length == 0) {
+                    $("#files_f_a").text("此格不能空")
+                // } else if (files_f.indexOf(" ") != -1) {
+                //     $("#files_f_a").text("不允許含有空白")
+                } else {
+                    $("#files_f_a").text("")
+                    f = true
+                }
+                e = false
+                if (files_e.length == 0) {
+                    $("#files_e_a").text("此格不能空")
+                } else if (files_e.indexOf(" ") != -1) {
+                    $("#files_e_a").text("不允許含有空白")
+                } else if (files_e.indexOf(".") != -1) {
+                    $("#files_e_a").text("都說不須加點了")
+                } else {
+                    $("#files_e_a").text("")
+                    e = true
+                }
+                n = false
+                num = $("#find_files_list_a").children("div").length
+                if (num <= (10**files_i)-files_n) {
+                    n = true
+                } else {
+                    $("#files_num_a").text("預備檔案數量過多")
+                }
+                if (f && e && n) {
+                    if ((window.location.pathname).indexOf("findfilesfrom=") != -1) {
+                        location.replace(`/rename/doing/files_f=${files_f}&files_e=${files_e}&files_i=${files_i}&files_n=${files_n}&folder=${window.location.pathname.substr(22)}`);
+                    } else {
+                        alert("錯誤！")
+                    }
+                }
+            })
+
+            $("#start_setting").click(function () {
+                
+            })
+            // $(`input:checkbox:checked[name="${topic[now_q][0]}"]`).map(function(){ return $(this).val(); }).get()
+            // $(`input:radio:checked[name="${topic[now_q][0]}"]`).val()
+        })
+    </script>
+</head>
+<body>
+    <div class="title">
+        <div class="title_I">批次檔案重新命名</div>
+        <a href="/" class="title_I title_a">＜返回</a>
+    </div>
+    <div class="link_box">
+        <a id="find_files">查看預備檔案</a>
+        <div id="find_files_list" style="display: none">{{ text }}</div>
+        <a id="from_files">變更預備檔案位置</a>
+        <div id="from_files_list" style="display: none;">
+            資料夾完整路徑：<input type="text" id="from_folder" value="" placeholder="(預設位置為.\files)"><div id="from_folder_a" style="color: red; display: inline;"></div><br>
+            <div style="text-align: end;"><a id="start_findfilesfrom" class="link_a">確認變更位置</a></div>
+        </div>
+        <a id="rename_data">重新命名資料</a>
+        <div id="rename_data_list" style="display: none">
+            <div id="a_box" class="list_a">
+                <a id="a_close" style="font-size: 12px;">關閉</a>
+                <div>名詞解釋：demo_img-001.jpg</div>
+                <div>demo_img- ：檔案前贅詞</div>
+                <div>001 ：檔案編號(整數變數)</div>
+                <div>.jpg ：副檔名</div>
+                <div>備註：預備檔案數量應為(10^編號位數)-編號起始值，預備檔案越多有可能產生錯誤或執行緩慢</div>
+            </div>
+            <div>
+                檔案前贅詞：<input type="text" id="files_f" value=""><div id="files_f_a" style="color: red; display: inline;"></div><br>
+                檔案副檔名：<input type="text" id="files_e" value="" placeholder="不須加副檔名點(jpg)"><div id="files_e_a" style="color: red; display: inline;"></div><br>
+                檔案編號位數：<input type="number" id="files_i" value="1"><br>
+                檔案編號起始值：<input type="number" id="files_n" value="0"><div id="files_n_a" style="display: inline;">目前起始最大值為：9</div><br>
+                適用預備檔案數量上限：<div id="files_num" style="display: inline;"></div>個<br>
+                目前預備檔案數量：<div id="files_num_b" style="display: inline;"></div>個
+                <div id="files_num_a" style="color: red;"></div>
+                <div style="text-align: end;">
+                    <a id="start_rename" class="link_a">開始執行</a>
+                </div>
+            </div>
+        </div>
+        <a id="rename_setting">相關設定</a>
+        <div id="rename_setting_list" style="display: none;">
+            <label><input type="checkbox" id="filtr"><span>　檔案類型篩選　</span></label>
+            <div id="filtr_a" style="display: none; margin-left: 2em">
+                <label><input type="radio" name="filtr" value="jpg"><span>.jpg</span></label>
+                <label><input type="radio" name="filtr" value="jpeg"><span>.jpeg</span></label>
+                <label><input type="radio" name="filtr" value="png"><span>.png</span></label>
+                <label><input type="radio" name="filtr" value="gif"><span>.gif</span></label>
+                <label><input type="radio" name="filtr" value="webp"><span>.webp</span></label>
+                <label><input type="radio" name="filtr" value="webm"><span>.webm</span></label>
+                <label><input type="radio" name="filtr" value="mp4"><span>.mp4</span></label>
+                <label><input type="radio" name="filtr" value="mov"><span>.mov</span></label>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

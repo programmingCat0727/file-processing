@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SYS>setting</title>
+    <link href="../static/index.css" rel="stylesheet" type="text/css">
+    <script src="../static/jquery-3.6.0.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            $("#start_setting").click( function () {
+                folder = $("#folder").val()
+                if (folder != "") {
+                    folder = folder.replace(/\//g, "|")
+                    folder = folder.replace(/\\/g, "|")
+                    folder = `${folder}|*`
+                } else{
+                    folder = "null_setting"
+                }
+                hint = ($("#hint:checked").length) ? "0" : "1";
+                location.replace(`/setting/doing/folder=${folder}&hint=${hint}`)
+
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="title">
+        <div class="title_I">設定</div>
+        <a href="/" class="title_I title_a">＜返回</a>
+    </div>
+    <div class="link_box">
+        <div>
+            變更預設資料夾位置：<input type="text" id="folder" value="" placeholder='預設"files"'>目前位置：{{ folder }}<br>
+            <label><input type="checkbox" id="hint" {{ setting_a_box }}><span>　關閉提示　</span></label>目前狀態：{{ hint }}
+        </div>
+        <div style="text-align: end;"><a id="start_setting" class="link_a">變更設定</a></div>
+    </div>
+</body>
+</html>

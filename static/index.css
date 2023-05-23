@@ -1,0 +1,82 @@
+body {
+    background-color: rgb(149, 116, 199);
+}
+span {
+    user-select: none;
+}
+a {
+    text-decoration: none;
+    user-select: none;
+    display: block;
+    font-size: 17px;
+    color: rgb(53, 106, 153);
+}
+a:hover {
+    color: rgb(112, 73, 156);
+}
+a:active {
+    color: rgb(255, 146, 231);
+}
+.title {
+    padding: 1%;
+    background-color: rgb(95, 0, 179);
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+}
+.title_I {
+    margin-right: 1%;
+}
+.title_I:last-child {
+    margin-left: auto;
+}
+.title_a {
+    color: white;
+    font-size: 24px;
+}
+.title_a:hover {
+    color: rgb(0, 124, 158);
+}
+.title_a:active {
+    color: rgb(0, 0, 0);
+}
+.link_box {
+    background-color: rgb(255, 255, 255);
+    margin: 1%;
+    padding: 1%;
+}
+.link_box > div {
+    background-color: rgb(140, 168, 252);
+    margin-left: 2%;
+    margin-right: 2%;
+}
+.link_a {
+    display: inline;
+    margin-right: 2%;
+    font-size: 17px;
+    color: rgb(35, 38, 189);
+}
+.link_a:hover {
+    color: rgb(23, 122, 96);
+}
+.link_a:active {
+    color: rgb(0, 0, 0);
+}
+.list_a {
+    background-color: rgb(122, 255, 149);
+}
+input[type="text"] {
+    width: 30%;
+}
+input[type="number"] {
+    width: 20%;
+}
+input[type="checkbox"] {
+    display: none;
+}
+input[type="checkbox"]:checked + span {
+    width: 20%;
+    color: rgb(255, 255, 255);
+    background-color: rgb(90, 90, 90);
+}

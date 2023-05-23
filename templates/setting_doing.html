@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SYS>srtting>over</title>
+    <link href="../../static/index.css" rel="stylesheet" type="text/css">
+    <script src="../../static/jquery-3.6.0.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            if ($("#result").text() == "錯誤！") {
+                $("#result").css("color", "red")
+            }
+        })
+    </script>
+</head>
+<body>
+    <div class="title">
+        <div class="title_I">變更設定結果</div>
+        <a href="/" class="title_I title_a">／回主頁</a>
+        <a href="/setting" class="title_I title_a">＜返回</a>
+    </div>
+    <div class="link_box">
+        <div id="result">{{ result }}</div>
+    </div>
+</body>
+</html>

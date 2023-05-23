@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ head_title }}</title>
+    <link href="../../static/index.css" rel="stylesheet" type="text/css">
+    <script src="../../static/jquery-3.6.0.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            function find_files(text) {
+                if ($("#result").text() == "批次檔案重新命名完成！") {
+                    html_text = ""
+                    text = text.split("|")
+                    text.forEach(n => {
+                        html_text += `
+                            <div>
+                                ${n}
+                            </div>`
+                    });
+                    $("#files_list").html(html_text)
+                } else if ($("#result").text() == "完成！") {
+                    $("#files_list").text(text)
+                } else if ($("#result").text() == "命名錯誤！"){
+                    $("#files_list").html("錯誤！<br>原因可能是發生名稱重複<br>也有可能是你在搞")
+                    $("#files_list").css("color", "red")
+                    $("#result").css("color", "red")
+                } else {
+                    $("#files_list").html("錯誤！<br>原因可能有很多種<br>但我懷疑是你在搞")
+                    $("#files_list").css("color", "red")
+                    $("#result").css("color", "red")
+                }
+            }
+            find_files($("#files_list").text())
+            $("#rename_result").click( function () {
+                $("#files_list").toggle()
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="title">
+        <div class="title_I">{{ title }}</div>
+        <a href="/" class="title_I title_a">／回主頁</a>
+        <a href="/{{ type }}/findfilesfrom={{ folder }}" class="title_I title_a">＜返回</a>
+    </div>
+    <div class="link_box">
+        <div id="result">{{ result }}</div>
+        <a id="rename_result">內容</a>
+        <div id="files_list" class="list" style="display: none;">{{ text }}</div>
+    </div>
+</body>
+</html>
